@@ -30,12 +30,12 @@ when 'debian'
 when 'rhel'
   case node['platform_version'].to_i
   when 5
-    include_recipe 'yum-epel'
+#    include_recipe 'yum-epel'
 
     yum_repository 'EPELErlangrepo' do
       description "Updated erlang yum repository for RedHat / Centos 5.x - #{node['kernel']['machine']}"
-      baseurl 'http://repos.fedorapeople.org/repos/peter/erlang/epel-5Server/$basearch'
-      gpgcheck false
+      url 'http://repos.fedorapeople.org/repos/peter/erlang/epel-5Server/$basearch'
+#      gpgcheck false
       action :create
     end
 
@@ -43,5 +43,11 @@ when 'rhel'
     include_recipe 'yum-erlang_solutions'
   end
 
-  package 'erlang'
+  #package 'erlang'
+
+  execute "install erlang" do
+    command "yum -d0 -e0 -y install erlang"
+    action :run
+    timeout 360
+  end
 end
